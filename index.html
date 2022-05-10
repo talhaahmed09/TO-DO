@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Todo App</title>
+    <link
+      rel="stylesheet"
+      href="style.css"
+      type="text/css"
+      media="screen"
+      charset="utf-8"
+    />
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- <h1 class="heading-1">TO-DO LIST</h1> -->
+      <form action="" id="form">
+        <div id="newtask">
+          <!-- <label for="new-task">Add Task</label> -->
+          <input
+            type="text"
+            class="input-area"
+            id="taskTitle"
+            placeholder="Add Task Title"
+          />
+          <!-- <button id="push">Add</button> -->
+        </div>
+
+        <div id="newtask">
+          <!-- <label for="new-task">Add Task</label> -->
+          <textarea
+            type="text"
+            class="input-area"
+            id="taskDetails"
+            placeholder="Add Task Details"
+          ></textarea>
+
+          <!-- <button id="push">Add</button> -->
+        </div>
+
+        <!-- <div id="newtask">
+                    <label for=""><input type="checkbox" placeholder="Add Task">Important</label>
+                </div>
+            -->
+        <div id="msg"></div>
+        <button id="push" type="submit">Add</button>
+      </form>
+    </div>
+
+    <script src="index.js"></script>
+  </body>
+</html>
