@@ -1,10 +1,12 @@
 let title = document.getElementById("taskTitle");
 let detail = document.getElementById("taskDetails");
 let form = document.getElementById("form");
-let add = document.getElementById("add");
+let add = document.getElementById("push");
 let msg = document.getElementById("msg");
 let editButton;
 let deleteButton;
+let isEdit = false;
+let editIndex = null;
 let data = [];
 
 form.addEventListener("submit",(e) => {
@@ -20,17 +22,36 @@ form.addEventListener("submit",(e) => {
     }else {
         console.log("success");
         msg.innerHTML = "";
-        acceptData();
+        if(!isEdit){
+            acceptData();
+        }else{
+            updateData();
+        }
+       
       }
   }
 
+  let updateData = () => {
+      let newData = {
+        title  : title.value,
+        detail: detail.value,
+      }
+      data[editIndex] = newData;
+      localStorage.setItem("data", JSON.stringify(data));
+      title.value ='';
+      detail.value = '';
+      updateList();
+  }
+
   let acceptData = () => {
+
       data.push({
           title  : title.value,
           detail: detail.value,
       })    
       localStorage.setItem("data", JSON.stringify(data));
-      console.log(data);
+      title.value ='';
+      detail.value = '';
       updateList();
   }
 
@@ -44,15 +65,30 @@ form.addEventListener("submit",(e) => {
 }
 
 function editTask(key){
-console.log(key)
+    isEdit = true;
+    push.innerHTML ="Edit";
+    editIndex = key;
+    title.value = data[key].title;
+    detail.value = data[key].detail;
 }
 
+
+
 function deleteTask(key){
-data.splice(key,1); 
-for(var currKey in data ){
-    let list ='';
-    list +=  `<li><label>${data[currKey].title}</label><label>${data[currKey].detail}</label><button class="edit" onClick="editTask(${currKey})" id="edit">Edit</button><button id="delete" onClick="deleteTask(${currKey})" class="delete">Delete</button></li>`
+   
+data.splice(key,1);
+
+localStorage.setItem("data", JSON.stringify(data));
+if(data.length != 0){
+    data.forEach(element => {
+        let list ='';
+        list +=  `<li><label>${data[currKey].title}</label><label>${data[currKey].detail}</label><button class="edit" onClick="editTask(${currKey})" id="edit">Edit</button><button id="delete" onClick="deleteTask(${currKey})" class="delete">Delete</button></li>`
+        document.getElementById('incomplete-tasks').innerHTML = list;
+    });
+}else {
+    list = ''
     document.getElementById('incomplete-tasks').innerHTML = list; 
 }
+
 }
 
