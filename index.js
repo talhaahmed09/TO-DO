@@ -8,6 +8,7 @@ let deleteButton;
 let isEdit = false;
 let editIndex = null;
 let data = [];
+let id = 0;
 
 form.addEventListener("submit",(e) => {
     
@@ -40,6 +41,8 @@ form.addEventListener("submit",(e) => {
       localStorage.setItem("data", JSON.stringify(data));
       title.value ='';
       detail.value = '';
+      isEdit = false;
+      push.innerHTML ="Add";
       updateList();
   }
 
@@ -79,12 +82,13 @@ function deleteTask(key){
 data.splice(key,1);
 
 localStorage.setItem("data", JSON.stringify(data));
+
 if(data.length != 0){
-    data.forEach(element => {
-        let list ='';
+    let list ='';
+    for(var currKey in data ){
         list +=  `<li><label>${data[currKey].title}</label><label>${data[currKey].detail}</label><button class="edit" onClick="editTask(${currKey})" id="edit">Edit</button><button id="delete" onClick="deleteTask(${currKey})" class="delete">Delete</button></li>`
-        document.getElementById('incomplete-tasks').innerHTML = list;
-    });
+        document.getElementById('incomplete-tasks').innerHTML = list; 
+    }
 }else {
     list = ''
     document.getElementById('incomplete-tasks').innerHTML = list; 
