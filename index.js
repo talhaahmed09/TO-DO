@@ -1,14 +1,15 @@
-let title = document.getElementById("taskTitle");
-let detail = document.getElementById("taskDetails");
-let form = document.getElementById("form");
-let add = document.getElementById("push");
-let msg = document.getElementById("msg");
+const title = document.getElementById("taskTitle");
+const detail = document.getElementById("taskDetails");
+const form = document.getElementById("form");
+const add = document.getElementById("push");
+const msg = document.getElementById("msg");
 let editButton;
 let deleteButton;
 let isEdit = false;
 let editIndex = null;
 let data = [];
 let id = 0;
+idKey = null;
 
 form.addEventListener("submit",(e) => {
     
@@ -17,7 +18,7 @@ form.addEventListener("submit",(e) => {
 })
 
   function formValidation() {
-    if(title.value === '' || detail.value === ''){
+    if(!title.value || detail.value === '' ){
         console.log("failure");
     msg.innerHTML = "Task cannot be blank";
     }else {
@@ -33,8 +34,10 @@ form.addEventListener("submit",(e) => {
   }
 
   let updateData = () => {
+      debugger;
       let newData = {
-        title  : title.value,
+        id:idKey,
+        title : title.value,
         detail: detail.value,
       }
       data[editIndex] = newData;
@@ -47,11 +50,13 @@ form.addEventListener("submit",(e) => {
   }
 
   let acceptData = () => {
-
+    debugger
       data.push({
+          id:id,
           title  : title.value,
           detail: detail.value,
-      })    
+      });
+      id++;
       localStorage.setItem("data", JSON.stringify(data));
       title.value ='';
       detail.value = '';
@@ -61,16 +66,18 @@ form.addEventListener("submit",(e) => {
   function updateList(){
       let list ='';
       for(var currKey in data ){
-        list +=  `<li><label>${data[currKey].title}</label><label>${data[currKey].detail}</label><button class="edit" onClick="editTask(${currKey})" id="edit">Edit</button><button id="delete" onClick="deleteTask(${currKey})" class="delete">Delete</button></li>`
+        list +=  `<li><label>${data[currKey].title}</label><label>${data[currKey].detail}</label><button class="edit" onClick="editTask(${data[currKey].id})" id="edit">Edit</button><button id="delete" onClick="deleteTask(${data[currKey].id})" class="delete">Delete</button></li>`
         document.getElementById('incomplete-tasks').innerHTML = list; 
     }
     
 }
 
 function editTask(key){
+    debugger;
     isEdit = true;
     push.innerHTML ="Edit";
-    editIndex = key;
+    idKey = key;
+    editIndex = data.findIndex(data => data.id == key)
     title.value = data[key].title;
     detail.value = data[key].detail;
 }
@@ -83,16 +90,14 @@ data.splice(key,1);
 
 localStorage.setItem("data", JSON.stringify(data));
 
-if(data.length != 0){
-    let list ='';
-    for(var currKey in data ){
-        list +=  `<li><label>${data[currKey].title}</label><label>${data[currKey].detail}</label><button class="edit" onClick="editTask(${currKey})" id="edit">Edit</button><button id="delete" onClick="deleteTask(${currKey})" class="delete">Delete</button></li>`
-        document.getElementById('incomplete-tasks').innerHTML = list; 
-    }
+if(data.length){
+   updateList();
 }else {
     list = ''
     document.getElementById('incomplete-tasks').innerHTML = list; 
 }
 
 }
+
+
 
